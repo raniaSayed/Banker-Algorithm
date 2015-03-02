@@ -19,21 +19,32 @@ public class Banker {
 	
 	public void checkRequest(int request[],int i ,int j){
 		if(request[j]<=need[i][j] && request[j]<=available[j]){
+			if(checksafety()==true){
+				//when process take resource
 			available[j]-=request[j];
-			allocation[i][j]-=request[j];
+			allocation[i][j]+=request[j];
 			need[i][j]-=request[j];
+			}
 		}
 	}
 	public boolean checksafety(){
+	boolean enter =false;
+			while(true){
 		for(int i=0;i<pr;i++){
 			for(int j=0;j<res;j++){
 			finish[i]=false;
 			if(need[i][j]<available[j]){
+				enter = true;
 				available[j]+=allocation[i][j];
 				finish[i]=true;
+				enter=true;
 			}
 			}
+			
 			}
+		if(enter==false)
+			break;
+		}
 			for(int i=0;i<pr;i++){
 				if(finish[i]){
 				flag=true;
@@ -43,12 +54,9 @@ public class Banker {
 					break;
 				}
 			}
-			if(flag){
-				return true;
-			}
-			return false;
+			return flag;
 	}
-	
+	}
 	public static String read(FileInputStream in) throws IOException{
 		String s="",result="";
 		 try (BufferedReader reader = new BufferedReader(
@@ -82,6 +90,20 @@ public class Banker {
 		read(in);
 		for(int i=0;i<pr;i++)
 			for(int j=0;j<res;j++)
-				System.out.println("max["+i+"]["+j+"]"+maximum[i][j]);
+				System.out.println("max["+i+"]["+j+"]"+maximum[i][j]); 
+		String choice ="";
+		while(true){
+			if(choice=="*"){
+				System.out.println("Allocation	Max	Available");
+				System.out.println(" A B C	A B C 	A B C");
+				for(int i=0;i<pr;i++){
+					for(int j=0;j<res;j++){
+					System.out.print("P"+i+" "+allocation[i][j]+" ");
+					}
+					System.out.println();
+				}
+			}
+				
+		}
 }
 }
